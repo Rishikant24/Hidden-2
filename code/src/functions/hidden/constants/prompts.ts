@@ -1,3 +1,10 @@
+/**
+ * Constants for prompts used to feed into GPT.
+ *
+ * This file contains constants representing prompts that are used as input to GPT (Generative Pre-trained Transformer).
+ * These prompts are used to generate text based on specific tasks or topics.
+ */
+
 export const promptAnomaly = `You are an expert in deriving feedback, spotting anomalies and generating insights based on events and their corresponding time stamps emitted by an user based on their UX on an app. Given below is a list of event names and their descriptions along with their time of occurrence. This data corresponds to the actions performed by different users during their session using an application. What can you derive from this and give me suggestions to improve UX from this data. 
 
 Input Format is in JSON in the following format:
@@ -43,49 +50,6 @@ The output should be strictly JSON with the below format:
 Give me the output for the following input:
 
 `;
-export const promptsTicket = `You are given a list containing a list of anomalies. Based on anomaly descriptions you need to create tickets. Each anomaly need not have a ticket, you need to cluster similar anomalies, and create a single ticket for them, i.e., you can group multiple anomalies under ONE ticket based on similarity you can look out for similar problems being pointed out or similar suggestions being hinted at in the anomaly descriptions. The tickets have a ticket_title (title of the ticket), ticket_anomaly (which talks about the anomaly being identified), ticket_reasons (why such behavior is considered anomalous and out of the normal) and ticket_enhancements (give suggestions, improvements, enhancements which could tackle such anomalous behaviors), anomaly_score( which is the average of all the anomalies in the cluster being used to create the ticket) fields. The tickets need to be solid and useful ! Make Daddy Proud
-This is the input format is :
-[
-   [
-       {
-           anomaly_title: “string”
-           anomaly_description: “string”
-           anomaly_score: “string”
-       },
-
-       ...
-   ],
-
-   [
-       {
-           anomaly_title: “string”
-           anomaly_description: “string”
-           anomaly_score: “string”
-       },
-
-       ...
-   ],
-   ...
-
-]
-I want the output format to be in JSON in the following structure:
-
-{
-   “tickets”:[
-           {
-               ticket_title: “string”
-               ticket_anomaly: "string" (explain the anomaly, that you are logging the ticket for)
-               ticket_reasons: "string" (explain why this behavior is anomalous and not considered normal )
-               ticket_enhancements: "string" (explain how this problem could be tackled, by suggesting improvements, enhancements of particular components, etc.)
-               anomaly_score: “string”
-           }
-]
-} 
-
-Give me the output for the following input:
-
-`;
-
 
 export const promptPartTag = `You will be given a list of parts and a list of tickets. Your job is to analyze each ticket based on its fields, and tag it to the part that  the ticket corresponds the most to ! If no such part exists, you can always tag it to the UX_General part. You need to just append the part under as a new ticket field. Keep the rest of the ticket fields exactly the same, and use them for only your inference, and assistance in tagging the right parts. Use the part names and descriptions to understand what they do and infer and tag them to the tickets.
 
@@ -155,8 +119,7 @@ List of Parts:
 
 `;
 
-
-export const promptTicket:string = `You are a product manager. You have a list of anomalies observed in the UI data along with the various parts of the UI. Some of the anomalies might mean the same thing. Can you turn them into a list of tickets, linked to the appropriate part?
+export const promptTicket: string = `You are a product manager. You have a list of anomalies observed in the UI data along with the various parts of the UI. Some of the anomalies might mean the same thing. Can you turn them into a list of tickets, linked to the appropriate part?
 
 Input Format: 
 
