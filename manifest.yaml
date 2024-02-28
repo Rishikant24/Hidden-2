@@ -1,0 +1,57 @@
+version: "2"
+name: "Hidden"
+description: "Consumes User Events from the Kafka Pipeline and intelligently clusters and generates takes related to UX issues based on anomalous data "
+
+service_account:
+  display_name: Hidden
+ 
+keyrings:
+  organization:
+    - name: openai_api_key
+      description: API Key for OpenAI
+      types:
+        - snap_in_secret
+      display_name: Open AI Api Key
+
+inputs:  
+  organization:
+    - name: kafka_url
+      description: "Url to get Kafka data"
+      field_type: text
+      is_required: false
+      default_value: ""
+      ui:
+        display_name: Kafka URL
+    - name: default_owner_id
+      description: "Default owner of the tickets."
+      field_type: id
+      id_type:
+        - devu
+      is_required: true
+      default_value: "don:identity:dvrv-us-1:devo/xxx:devu/xxx"
+      ui:
+        display_name: Default Owner
+
+
+tags:
+  - name: anomaly-level_High
+    description: "Immediate Attention: Critical anomalies identified in UX data. Urgent action required."
+  - name: anomaly-level_Medium
+    description: "Attention Required: Serious anomalies detected in UX data. Investigation recommended."
+  - name: anomaly-level_Low
+    description: "Noteworthy: Anomalies observed in UX data. Monitor and address as necessary."
+
+commands:
+  - name: hidden
+    namespace: devrev
+    description: Fetches unspoken feedback from the User's Kafka and logs tickets based on anomalous data
+    surfaces:
+      - surface: discussions
+        object_types:
+          - snap_in
+    usage_hint: "/hidden"
+    function: hidden
+
+functions:
+  - name: hidden
+    description: Fetches unspoken feedback from the User's Kafka and logs tickets based on anomalous data
