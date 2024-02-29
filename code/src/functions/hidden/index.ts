@@ -25,6 +25,7 @@ export const run = async (events: any[]) => {
     const partsList = await apiUtil.getParts();
 
     const kafkaData = await getKafkaData(inputs['kafka_url']);
+    
     let allAnomalies = await identifyAnomalies(GPT, kafkaData);
 
     const finalTickets = await getFinalTickets(GPT, partsList, allAnomalies);
