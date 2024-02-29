@@ -1,4 +1,4 @@
-![Logo](./logo.png)
+## Hidden
 
 Hidden allows you to analyze your user's event stream data, extract actionable insights and turn them into tickets on DevRev!
 
