@@ -1,5 +1,6 @@
 import { client, publicSDK } from '@devrev/typescript-sdk';
 import { AxiosResponse } from 'axios';
+import { getListFromPartsResponse } from '../utils/devrev';
 
 export type HTTPResponse = {
   success: boolean;
@@ -99,8 +100,8 @@ export class ApiUtils {
     return updateTimelineResponse;
   }
 
+  // Create a new comment with visibility timeout
   async postTextMessageWithVisibilityTimeout(snapInId: string, message: string, expiresInMins: number) {
-    // Create a new comment.
     const createPayload: publicSDK.TimelineEntriesCreateRequest = {
       expires_at: new Date(Date.now() + expiresInMins * 60000).toISOString(),
       body: message,
@@ -109,25 +110,28 @@ export class ApiUtils {
       type: publicSDK.TimelineEntriesCreateRequestType.TimelineComment,
       visibility: publicSDK.TimelineEntryVisibility.Internal,
     };
-
     const createTimelineResponse: HTTPResponse = await this.createTimeLine(createPayload);
+    if (!createTimelineResponse.success) {
+      console.error(`Error while creating timeline entry: ${createTimelineResponse.message}`);
+    }
     return createTimelineResponse;
   }
 
   // Fetch the parts list
-  async getParts(payload: publicSDK.PartsListRequest = {}): Promise<{data: publicSDK.PartsListResponse, message: string, success: boolean}> {
-    try {  
+  async getParts(payload: publicSDK.PartsListRequest = {}): Promise<
+    | {
+        name: string;
+        description: string | undefined;
+        id: string;
+      }[]
+    | null
+  > {
+    try {
       const response: AxiosResponse = await this.devrevSdk.partsList(payload);
-      return { data: response.data, message: 'Parts retrieved succesfully', success: true };
+      return getListFromPartsResponse(response.data);
     } catch (error: any) {
-      if (error.response) {
-        const err = `Failed to fetch parts. Err: ${JSON.stringify(error.response.data)}, Status: ${
-          error.response.status
-        }`;
-        return { ...defaultResponse, message: err };
-      } else {
-        return { ...defaultResponse, message: error.message };
-      }
+      console.log('Cannot get parts');
+      return null;
     }
   }
 }
